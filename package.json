@@ -1,0 +1,27 @@
+{
+  "name": "langchain-examples",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yzqzy/langchain-examples.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yzqzy/langchain-examples/issues"
+  },
+  "homepage": "https://github.com/yzqzy/langchain-examples#readme",
+  "dependencies": {
+    "langchain": "^0.0.104"
+  },
+  "devDependencies": {
+    "vite": "^4.4.2"
+  }
+}
