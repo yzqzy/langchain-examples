@@ -19,7 +19,8 @@
   },
   "homepage": "https://github.com/yzqzy/langchain-examples#readme",
   "dependencies": {
-    "langchain": "^0.0.104"
+    "langchain": "^0.0.104",
+    "serpapi": "^1.1.1"
   },
   "devDependencies": {
     "vite": "^4.4.2"
