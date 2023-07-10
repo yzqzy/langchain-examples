@@ -19,7 +19,8 @@
   "homepage": "https://github.com/yzqzy/langchain-examples#readme",
   "dependencies": {
     "axios": "^1.4.0",
-    "langchain": "^0.0.104",
+    "hnswlib-node": "^2.0.0",
+    "langchain": "^0.0.105",
     "serpapi": "^1.1.1"
   },
   "devDependencies": {
