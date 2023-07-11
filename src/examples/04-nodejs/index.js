@@ -1,12 +1,14 @@
+// use node.js commonjs, must remove package.json type field.
+
 const { ChatOpenAI } = require('langchain/chat_models/openai')
 const { HumanMessage } = require('langchain/schema')
 
-const { OPENAI_API_KEY } = require('../../config/index.module')
+require('dotenv').config()
 
 const App = async () => {
   try {
     const chat = new ChatOpenAI(
-      { temperature: 0, openAIApiKey: OPENAI_API_KEY }
+      { temperature: 0  }
     )
     const response = await chat.call([
       new HumanMessage(

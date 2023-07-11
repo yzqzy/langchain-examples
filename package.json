@@ -2,6 +2,7 @@
   "name": "langchain-examples",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "dev": "vite",
@@ -20,6 +21,7 @@
   "homepage": "https://github.com/yzqzy/langchain-examples#readme",
   "dependencies": {
     "axios": "^1.4.0",
+    "dotenv": "^16.3.1",
     "hnswlib-node": "^2.0.0",
     "langchain": "^0.0.105",
     "serpapi": "^1.1.1"
