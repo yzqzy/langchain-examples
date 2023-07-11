@@ -9,12 +9,15 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
+    "@element-plus/nuxt": "^1.0.5",
     "@nuxt/devtools": "latest",
     "@types/node": "^18.16.19",
+    "element-plus": "^2.3.7",
     "nuxt": "^3.6.2",
     "sass": "^1.63.6"
   },
   "dependencies": {
+    "hnswlib-node": "^2.0.0",
     "langchain": "^0.0.105"
   }
 }

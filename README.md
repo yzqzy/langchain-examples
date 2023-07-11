@@ -6,7 +6,7 @@ langchain.js 案例集
 * chat models - translation assistant
 * chat - data analysis
 
-## windows proxy
+## Windows proxy
 
 ```bash
 export http_proxy=http://127.0.0.1:7890
