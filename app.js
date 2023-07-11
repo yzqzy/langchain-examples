@@ -1,15 +1,15 @@
-const { DirectoryLoader } = require('langchain/document_loaders/fs/directory')
-const { JSONLoader } = require('langchain/document_loaders/fs/json')
+import { DirectoryLoader } from 'langchain/document_loaders/fs/directory'
+import { JSONLoader } from 'langchain/document_loaders/fs/json'
 
-const express = require('express');
-const cors = require('cors')
+import express from 'express'
+import cors from 'cors'
 
-const app = express();
+const app = express()
 
 app.use(cors())
 
 app.get('/', async (req, res) => {
-  const loader = new DirectoryLoader('static', {
+  const loader = new DirectoryLoader('static/data', {
     '.json': path => new JSONLoader(path, ['/wname'])
   })
   const docs = await loader.load()
