@@ -1,19 +1,10 @@
-# langchain-examples
+# Chat Dashboard
 
-langchain.js 案例集
-
-* llms - give your a name
-* chat models - translation assistant
-* chat - data analysis
-
-## windows proxy
-
-```bash
-export http_proxy=http://127.0.0.1:7890
-export https_proxy=http://127.0.0.1:7890
-```
+Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
 ## Setup
+
+Make sure to install the dependencies:
 
 ```bash
 # npm
@@ -27,6 +18,8 @@ yarn install
 ```
 
 ## Development Server
+
+Start the development server on `http://localhost:3000`:
 
 ```bash
 # npm
@@ -68,5 +61,3 @@ yarn preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
-
-Start the development server on `http://localhost:3000`:

@@ -5,8 +5,10 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "vite",
-    "serve": "node app.js"
+    "test:dev": "vite",
+    "test:serve": "node app.js",
+    "dev": "cd src/examples/chat-dashboard && npm run dev",
+    "build": "cd src/examples/chat-dashboard && npm run build"
   },
   "repository": {
     "type": "git",
