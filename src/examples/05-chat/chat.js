@@ -16,17 +16,19 @@ import { PROMPT_TEMPLATE } from './prompt.js'
 
 const CWD_PATH = process.cwd()
 
-const DATA_PATH = path.join(CWD_PATH, 'static/data')
-const VENCTOR_DATA_PATH = path.join(CWD_PATH, 'static/data_venctor')
+let DATA_PATH = path.join(CWD_PATH, 'static/data')
+let VENCTOR_DATA_PATH = path.join(CWD_PATH, 'static/data_venctor')
 
 const getFileName = (path) => {
   const parts = path.split("/");
   return parts.pop() || '';
 }
 
-const getLocalFiles = () => fs.readFileSync(DATA_PATH)
+const getLocalFiles = (target) => fs.readdirSync(target || DATA_PATH)
 
-const getLocalDocs = async () => {
+const getLocalDocs = async (target) => {
+  const dataPath = target || DATA_PATH
+
   const useedFields = [
     'wareId',
     'wname',
@@ -36,7 +38,7 @@ const getLocalDocs = async () => {
     "brand"
   ]
 
-  const loader = new DirectoryLoader(DATA_PATH, {
+  const loader = new DirectoryLoader(dataPath, {
     // '.json': path => new JSONLoader(path)
     '.json': path => new JSONLoader(path, useedFields.map(field => `/${field}`))
   })
@@ -44,9 +46,11 @@ const getLocalDocs = async () => {
   return docs
 }
 
-const initVectorStore = async rawDocs => {
-  if (fs.existsSync(`${VENCTOR_DATA_PATH}/docstore.json`)) {
-    const vectorStore = await HNSWLib.load(VENCTOR_DATA_PATH, new OpenAIEmbeddings({}))
+const initVectorStore = async (rawDocs, dest) => {
+  const destPath = dest || VENCTOR_DATA_PATH
+
+  if (fs.existsSync(`${destPath}/docstore.json`)) {
+    const vectorStore = await HNSWLib.load(destPath, new OpenAIEmbeddings({}))
     return vectorStore
   }
 
@@ -63,7 +67,7 @@ const initVectorStore = async rawDocs => {
     })
   )
 
-  await vectorStore.save(VENCTOR_DATA_PATH)
+  await vectorStore.save(destPath)
 
   console.log('create data success')
 

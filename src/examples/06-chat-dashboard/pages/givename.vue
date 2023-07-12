@@ -12,8 +12,8 @@
         <p>建议名称：</p>{{ suggested }}
       </div>
       <div>
-        <el-button class="btn" type="info" @click="clear">重置</el-button>
-        <el-button class="btn" type="success" :loading="loading" @click="submit">提交</el-button>
+        <el-button class="btn" @click="clear">重置</el-button>
+        <el-button class="btn" :loading="loading" @click="submit">提交</el-button>
       </div>
     </div>
   </div>
@@ -31,7 +31,7 @@ const clear = () => {
 }
 
 const submit = async () => {
-  if (textarea.value === '') return
+  if (!textarea.value) return
 
   loading.value = true
 
