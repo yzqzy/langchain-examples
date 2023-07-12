@@ -1,12 +1,24 @@
 import { config } from 'dotenv'
-import { getLocalDocs, initVectorStore, chat } from './chat.js'
+import { join } from 'path'
+
+import { LLMChat } from './chat.js'
+import { PROMPT_TEMPLATE } from './prompt.js'
 
 config()
 
 const App = async () => {
-  const fiels = await getLocalDocs()
-  const vectorStore = await initVectorStore(fiels)
-  const answer = await chat(vectorStore, "元气森林有哪些店铺")
+  const DATA_PATH = join(process.cwd(), 'static/data')
+  const VENCTOR_DATA_PATH = join(process.cwd(), 'static/data_venctor')
+
+  const llmChat = new LLMChat({
+    target: DATA_PATH,
+    dest: VENCTOR_DATA_PATH,
+    prompt: PROMPT_TEMPLATE
+  })
+
+  const fiels = await llmChat.getLocalDocs()
+  const vectorStore = await llmChat.initVectorStore(fiels)
+  const answer = await llmChat.chat(vectorStore, "元气森林有哪些店铺")
 
   try {
     const { text } = answer

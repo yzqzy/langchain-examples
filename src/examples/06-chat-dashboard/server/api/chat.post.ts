@@ -1,4 +1,6 @@
-import { getLocalDocs, initVectorStore, chat } from '../../../05-chat/chat.js'
+import { LLMChat } from '../../../05-chat/chat.js'
+import { PROMPT_TEMPLATE } from '../../../05-chat/prompt.js'
+
 import { join } from 'path'
 
 export default defineEventHandler(async event => {
@@ -8,9 +10,15 @@ export default defineEventHandler(async event => {
   const target = join(base, 'static/data')
   const dest = join(base, 'static/data_venctor')
 
-  const fiels = await getLocalDocs(target)
-  const vectorStore = await initVectorStore(fiels, dest)
-  const answer = await chat(vectorStore, text)
+  const llmChat = new LLMChat({
+    target,
+    dest,
+    prompt: PROMPT_TEMPLATE
+  })
+
+  const fiels = await llmChat.getLocalDocs()
+  const vectorStore = await llmChat.initVectorStore(fiels)
+  const answer = await llmChat.chat(vectorStore, text)
 
   return answer.text
 })

@@ -1,4 +1,3 @@
-import path from 'path'
 import fs from 'fs'
 
 import { LLMChain } from 'langchain/chains'
@@ -12,96 +11,108 @@ import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter'
 import { HNSWLib } from 'langchain/vectorstores/hnswlib'
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai'
 
-import { PROMPT_TEMPLATE } from './prompt.js'
+class LLMChat {
+  constructor(options) {
+    const { target, dest, prompt } = options
 
-const CWD_PATH = process.cwd()
+    this.target = target
+    this.dest = dest
+    this.prompt = prompt
+  }
 
-let DATA_PATH = path.join(CWD_PATH, 'static/data')
-let VENCTOR_DATA_PATH = path.join(CWD_PATH, 'static/data_venctor')
+  getLocalFiles() {
+    return fs.readdirSync(this.target)
+  }
 
-const getFileName = (path) => {
-  const parts = path.split("/");
-  return parts.pop() || '';
-}
+  async getLocalDocs(type = 'json') {
+    let loader
 
-const getLocalFiles = (target) => fs.readdirSync(target || DATA_PATH)
+    switch (type) {
+      case 'json':
+        loader = new DirectoryLoader(this.target, {
+          '.json': path => new JSONLoader(path, [
+            'wareId',
+            'wname',
+            'shop_id',
+            'shop_name',
+            'sales_rank',
+            "brand"
+          ].map(field => `/${field}`))
+        })
+        break;
+      case 'csv':
 
-const getLocalDocs = async (target) => {
-  const dataPath = target || DATA_PATH
+        break
 
-  const useedFields = [
-    'wareId',
-    'wname',
-    'shop_id',
-    'shop_name',
-    'sales_rank',
-    "brand"
-  ]
+      default:
+        break;
+    }
 
-  const loader = new DirectoryLoader(dataPath, {
-    // '.json': path => new JSONLoader(path)
-    '.json': path => new JSONLoader(path, useedFields.map(field => `/${field}`))
-  })
-  const docs = await loader.load()
-  return docs
-}
+    const docs = await loader.load()
 
-const initVectorStore = async (rawDocs, dest) => {
-  const destPath = dest || VENCTOR_DATA_PATH
+    return docs
+  }
 
-  if (fs.existsSync(`${destPath}/docstore.json`)) {
-    const vectorStore = await HNSWLib.load(destPath, new OpenAIEmbeddings({}))
+  async initVectorStore(rawDocs) {
+    const { dest } = this
+
+    if (fs.existsSync(`${dest}/docstore.json`)) {
+      const vectorStore = await HNSWLib.load(dest, new OpenAIEmbeddings({}))
+      return vectorStore
+    }
+
+    const textSplitter = new RecursiveCharacterTextSplitter({
+      chunkSize: 1000,
+      chunkOverlap: 200
+    })
+
+    const docs = await textSplitter.splitDocuments(rawDocs)
+    const vectorStore = await HNSWLib.fromDocuments(
+      docs,
+      new OpenAIEmbeddings({
+        verbose: true
+      })
+    )
+
+    await vectorStore.save(destPath)
+
+    console.log('create data success')
+
     return vectorStore
   }
 
-  const textSplitter = new RecursiveCharacterTextSplitter({
-    chunkSize: 1000,
-    chunkOverlap: 200
-  })
-
-  const docs = await textSplitter.splitDocuments(rawDocs)
-  const vectorStore = await HNSWLib.fromDocuments(
-    docs,
-    new OpenAIEmbeddings({
-      verbose: true
+  _generateChain() {
+    const model = new OpenAI({ temperature: 0 })
+    const prompt = PromptTemplate.fromTemplate(
+      this.prompt
+    )
+    return new LLMChain({
+      llm: model,
+      prompt
     })
-  )
+  }
 
-  await vectorStore.save(destPath)
+  async _chatWithLLM(options) {
+    const { question, referenceContext } = options
+    const chain = this._generateChain()
+    const res = await chain.call({ question, context: referenceContext })
+    return res
+  }
 
-  console.log('create data success')
+  _getFileName(path) {
+    const parts = path.split("/");
+    return parts.pop() || '';
+  }
 
-  return vectorStore
+  async chat(vectorStore, question) {
+    const referenceContextDocuments = await vectorStore.similaritySearch(question, 1);
+    const contextString = (referenceContextDocuments || []).map(docItem => `[${this._getFileName(docItem.metadata.source)}] ${docItem.pageContent}`).join('/n')
+    const answer = await this._chatWithLLM({ question, referenceContext: contextString })
+    return answer
+  }
 }
 
-const _generateChain = () => {
-  const model = new OpenAI({ temperature: 0 })
-  const prompt = PromptTemplate.fromTemplate(
-    PROMPT_TEMPLATE
-  )
-  return new LLMChain({
-    llm: model,
-    prompt
-  })
-}
-
-const _chatWithLLM = async (options) => {
-  const { question, referenceContext } = options
-  const chain = _generateChain()
-  const res = await chain.call({ question, context: referenceContext })
-  return res
-}
-
-const chat = async (vectorStore, question) => {
-  const referenceContextDocuments = await vectorStore.similaritySearch(question, 1);
-  const contextString = (referenceContextDocuments || []).map(docItem => `[${getFileName(docItem.metadata.source)}] ${docItem.pageContent}`).join('/n')
-  const answer = await _chatWithLLM({ question, referenceContext: contextString })
-  return answer
-}
 
 export {
-  getLocalFiles,
-  getLocalDocs,
-  initVectorStore,
-  chat
+  LLMChat
 }

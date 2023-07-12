@@ -1,8 +1,8 @@
-import { getLocalFiles } from '../../../05-chat/chat.js'
+import { readdirSync } from 'fs'
 import { join } from 'path'
 
 export default defineEventHandler(async () => {
   const dir = join(process.cwd(), '../../../static/data')
-  const files = getLocalFiles(dir)
+  const files = readdirSync(dir)
   return files
 })
