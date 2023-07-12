@@ -6,6 +6,7 @@ import { OpenAI } from 'langchain/llms/openai'
 
 import { DirectoryLoader } from 'langchain/document_loaders/fs/directory'
 import { JSONLoader } from 'langchain/document_loaders/fs/json'
+import { CSVLoader } from "langchain/document_loaders/fs/csv";
 
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter'
 import { HNSWLib } from 'langchain/vectorstores/hnswlib'
@@ -41,7 +42,9 @@ class LLMChat {
         })
         break;
       case 'csv':
-
+        loader = new DirectoryLoader(this.target, {
+          '.csv': path => new CSVLoader(path)
+        })
         break
 
       default:
@@ -74,7 +77,7 @@ class LLMChat {
       })
     )
 
-    await vectorStore.save(destPath)
+    await vectorStore.save(dest)
 
     console.log('create data success')
 

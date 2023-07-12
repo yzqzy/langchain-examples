@@ -7,8 +7,8 @@ export default defineEventHandler(async event => {
   const { text } = await readBody(event)
 
   const base = join(process.cwd(), '../../../')
-  const target = join(base, 'static/data')
-  const dest = join(base, 'static/data_venctor')
+  const target = join(base, 'static/zhicheng_data')
+  const dest = join(base, 'static/zhicheng_venctor_data')
 
   const llmChat = new LLMChat({
     target,
@@ -16,7 +16,7 @@ export default defineEventHandler(async event => {
     prompt: PROMPT_TEMPLATE
   })
 
-  const fiels = await llmChat.getLocalDocs()
+  const fiels = await llmChat.getLocalDocs('csv')
   const vectorStore = await llmChat.initVectorStore(fiels)
   const answer = await llmChat.chat(vectorStore, text)
 

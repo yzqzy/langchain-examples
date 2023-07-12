@@ -47,8 +47,8 @@ const case03 = async () => {
 
 const App = async () => {
   // case01()
-  // case02()
-  case03()
+  case02()
+  // case03()
 }
 
 App()
