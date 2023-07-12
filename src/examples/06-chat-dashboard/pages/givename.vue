@@ -6,18 +6,14 @@
     </div>
     <div class="main">
       <div>
-        <el-input
-          class="textarea"
-          v-model="textarea"
-          :rows="4"
-          type="textarea"
-          placeholder="请输入您公司的主营产品"
-        />
+        <el-input class="textarea" v-model="textarea" :rows="4" type="textarea" placeholder="请输入您公司的主营产品" />
       </div>
-      <div class="names"><p>建议名称：</p>{{ suggested }}</div>
+      <div class="names">
+        <p>建议名称：</p>{{ suggested }}
+      </div>
       <div>
         <el-button class="btn" type="info" @click="clear">重置</el-button>
-        <el-button class="btn" type="success" :disabled="submitDisabled" @click="submit">提交</el-button>
+        <el-button class="btn" type="success" :loading="loading" @click="submit">提交</el-button>
       </div>
     </div>
   </div>
@@ -28,8 +24,6 @@ const textarea = ref('')
 const suggested = ref('')
 
 const loading = ref(false)
-
-const submitDisabled = computed(() => textarea.value == '' || loading.value)
 
 const clear = () => {
   textarea.value = ''
@@ -76,7 +70,7 @@ const submit = async () => {
       width: 300px;
       margin-top: 20px;
       font-size: 14px;
-      color: gray;
+      font-weight: bold;
     }
 
     .btn {

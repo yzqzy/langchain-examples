@@ -13,11 +13,13 @@ export http_proxy=http://127.0.0.1:7890
 export https_proxy=http://127.0.0.1:7890
 ```
 
-## setup
+## .env file
 
 ```bash
-cd src/examples/06-chat-dashboard
+OPENAI_API_KEY=<your key>
 ```
+
+## setup
 
 ```bash
 # npm
