@@ -85,7 +85,7 @@ class LLMChat {
   }
 
   _generateChain() {
-    const model = new OpenAI({ temperature: 0 })
+    const model = new OpenAI({ temperature: 0, maxTokens: -1 })
     const prompt = PromptTemplate.fromTemplate(
       this.prompt
     )

@@ -2,7 +2,7 @@ import { config } from 'dotenv'
 import { join } from 'path'
 
 import { LLMChat } from './chat.js'
-import { PROMPT_TEMPLATE, ZHICHENG_PROMPT_TEMPLATE } from './prompt.js'
+import { PROMPT_TEMPLATE, ZHICHENG_CHAT_PROMPT_TEMPLATE } from './prompt.js'
 
 config()
 
@@ -39,12 +39,12 @@ const zhichengCase = async () => {
   const llmChat = new LLMChat({
     target: DATA_PATH,
     dest: VENCTOR_DATA_PATH,
-    prompt: ZHICHENG_PROMPT_TEMPLATE
+    prompt: ZHICHENG_CHAT_PROMPT_TEMPLATE
   })
 
   const fiels = await llmChat.getLocalDocs('csv')
   const vectorStore = await llmChat.initVectorStore(fiels)
-  const answer = await llmChat.chat(vectorStore, "北京的GDP年度数据")
+  const answer = await llmChat.chat(vectorStore, "上海的GDP年度数据")
 
   try {
     const { text } = answer
