@@ -15,6 +15,8 @@ export https_proxy=http://127.0.0.1:7890
 
 ## .env file
 
+部分案例使用本地 .env 文件，需要自主创建。
+
 ```bash
 OPENAI_API_KEY=<your key>
 ```

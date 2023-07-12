@@ -169,7 +169,7 @@ onMounted(() => {
 
   .chat-gpt-wrap {
     width: 500px;
-    height: 500px;
+    height: 600px;
     display: flex;
     flex-direction: column;
     border: 1px solid #ccc;
