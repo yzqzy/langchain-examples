@@ -16,6 +16,10 @@ export https_proxy=http://127.0.0.1:7890
 ## Setup
 
 ```bash
+cd src/examples/06-chat-dashboard
+```
+
+```bash
 # npm
 npm install
 

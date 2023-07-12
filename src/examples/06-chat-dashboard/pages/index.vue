@@ -2,9 +2,9 @@
   <div class="wrap">
     <h2>langchain examples</h2>
 
-      <NuxtLink class="nav" to="/givename">llms - give your a name</NuxtLink>
-      <NuxtLink class="nav" to="/translate">chat models - translation assistant</NuxtLink>
-      <NuxtLink class="nav" to="/chat">chat - data analysis</NuxtLink>
+    <NuxtLink class="nav" to="/givename">llms - give your a name</NuxtLink>
+    <NuxtLink class="nav" to="/translate">chat models - translation assistant</NuxtLink>
+    <NuxtLink class="nav" to="/chat">chat - data analysis</NuxtLink>
   </div>
 </template>
 

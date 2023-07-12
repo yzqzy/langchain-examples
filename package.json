@@ -8,7 +8,8 @@
     "test:dev": "vite",
     "test:serve": "node app.js",
     "dev": "cd src/examples/06-chat-dashboard && npm run dev",
-    "build": "cd src/examples/06-chat-dashboard && npm run build"
+    "build": "cd src/examples/06-chat-dashboard && npm run build",
+    "preview": "cd src/examples/06-chat-dashboard && npm run preview"
   },
   "repository": {
     "type": "git",
