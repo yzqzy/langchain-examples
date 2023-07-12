@@ -6,14 +6,14 @@ langchain.js 案例集
 * chat models - translation assistant
 * chat - data analysis
 
-## Windows proxy
+## windows proxy
 
 ```bash
 export http_proxy=http://127.0.0.1:7890
 export https_proxy=http://127.0.0.1:7890
 ```
 
-## Setup
+## setup
 
 ```bash
 cd src/examples/06-chat-dashboard
@@ -30,7 +30,7 @@ pnpm install
 yarn install
 ```
 
-## Development Server
+## development server
 
 ```bash
 # npm
@@ -43,7 +43,7 @@ pnpm run dev
 yarn dev
 ```
 
-## Production
+## production
 
 Build the application for production:
 
@@ -70,7 +70,3 @@ pnpm run preview
 # yarn
 yarn preview
 ```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
-
-Start the development server on `http://localhost:3000`:
