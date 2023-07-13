@@ -1,10 +1,24 @@
 import { LLMChat } from '../../../05-chat/chat.js'
-import { PROMPT_TEMPLATE } from '../../../05-chat/prompt.js'
+import { ZHICHENG_PROMPT_TEMPLATE, ZHICHENG_CHAT_PROMPT_TEMPLATE } from '../../../05-chat/prompt.js'
 
 import { join } from 'path'
 
 export default defineEventHandler(async event => {
-  const { text } = await readBody(event)
+  const { type, text } = await readBody(event)
+
+  let prompt
+
+  switch (type) {
+    case 'text':
+      prompt = ZHICHENG_PROMPT_TEMPLATE
+      break
+    case 'charts':
+      prompt = ZHICHENG_CHAT_PROMPT_TEMPLATE
+      break
+    default:
+      prompt = ZHICHENG_PROMPT_TEMPLATE
+      break
+  }
 
   const base = join(process.cwd(), '../../../')
   const target = join(base, 'static/zhicheng_data')
@@ -13,7 +27,7 @@ export default defineEventHandler(async event => {
   const llmChat = new LLMChat({
     target,
     dest,
-    prompt: PROMPT_TEMPLATE
+    prompt
   })
 
   const fiels = await llmChat.getLocalDocs('csv')

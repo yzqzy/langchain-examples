@@ -44,7 +44,7 @@ const zhichengCase = async () => {
 
   const fiels = await llmChat.getLocalDocs('csv')
   const vectorStore = await llmChat.initVectorStore(fiels)
-  const answer = await llmChat.chat(vectorStore, "上海的GDP年度数据")
+  const answer = await llmChat.chat(vectorStore, "北京的人口数据")
 
   try {
     const { text } = answer

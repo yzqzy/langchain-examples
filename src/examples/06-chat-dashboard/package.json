@@ -17,7 +17,9 @@
     "sass": "^1.63.6"
   },
   "dependencies": {
+    "chart.js": "^4.3.0",
     "hnswlib-node": "^2.0.0",
-    "langchain": "^0.0.105"
+    "langchain": "^0.0.105",
+    "vue-chartjs": "^5.2.0"
   }
 }

@@ -5,6 +5,7 @@
     <NuxtLink class="nav" to="/givename">llms - give your a name</NuxtLink>
     <NuxtLink class="nav" to="/translate">chat models - translation assistant</NuxtLink>
     <NuxtLink class="nav" to="/chat">chat - data analysis</NuxtLink>
+    <NuxtLink class="nav" to="/chat-charts">chat - charts generate</NuxtLink>
   </div>
 </template>
 
