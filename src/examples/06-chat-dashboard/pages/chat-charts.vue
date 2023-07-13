@@ -13,7 +13,7 @@
         <div class="chat-gpt-input">
           <el-input v-model="inputText" :disabled="loading" placeholder="请输入问题" @keyup.enter="query" />
         </div>
-        <div class="chat-gpt-container">
+        <div v-loading="loading" class="chat-gpt-container">
           <div v-if="message">
             <div class="chat-gpt-content">
               {{ message.content }}
