@@ -128,11 +128,11 @@ const query = async () => {
 
     console.log(data.value)
 
-    const { text: answer, similiarAnswers, dimension, data: chartsData } = JSON.parse(data.value)
+    const { summary, similiarAnswers, dimension, data: chartsData } = JSON.parse(data.value)
 
     const msg = {
       question: text,
-      content: answer,
+      content: summary,
       similiarAnswers,
       lineCharts: generateData(dimension, chartsData),
       barCharts: generateData(dimension, chartsData),

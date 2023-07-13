@@ -32,36 +32,45 @@ const jdCase = async () => {
   }
 }
 
-const zhichengCase = async () => {
+let llmChat
+const zhichengCase = async (question) => {
   const DATA_PATH = join(process.cwd(), 'static/zhicheng_data')
   const VENCTOR_DATA_PATH = join(process.cwd(), 'static/zhicheng_venctor_data')
 
-  const llmChat = new LLMChat({
-    target: DATA_PATH,
-    dest: VENCTOR_DATA_PATH,
-    prompt: ZHICHENG_CHAT_PROMPT_TEMPLATE
-  })
+  if (!llmChat) {
+    llmChat = new LLMChat({
+      target: DATA_PATH,
+      dest: VENCTOR_DATA_PATH,
+      prompt: ZHICHENG_CHAT_PROMPT_TEMPLATE
+    })
+  }
 
   const fiels = await llmChat.getLocalDocs('csv')
   const vectorStore = await llmChat.initVectorStore(fiels)
-  const answer = await llmChat.chat(vectorStore, "北京的地区生产总值数据")
+  const answer = await llmChat.chatWithCache(vectorStore, question)
 
   try {
-    const { text } = answer
-
-    console.log(text)
-
-    const data = JSON.parse(text)
-
-    console.log(data)
+    console.log(answer.text)
+    console.log(JSON.parse(answer.text))
   } catch (error) {
     console.log('analysis failed')
   }
 }
 
+const timemout = (ms) => new Promise((resolve) => {
+  console.log(`delay ${ms}ms`)
+  setTimeout(() => {
+    resolve()
+    console.log(`delay finished`)
+  }, ms)
+})
+
 const App = async () => {
   // await jdCase()
-  await zhichengCase()
+
+  await zhichengCase("天津市的GDP年度数据")
+  // await timemout(3 * 1000)
+  // await zhichengCase("人口数据")
 }
 
 App()

@@ -96,7 +96,7 @@ const sendMessage = async () => {
       body: { text }
     })
 
-    const { text: answer, similiarAnswers } = JSON.parse(data.value)
+    const { text: answer, similiarAnswers } = data.value
 
     pushMessage(false, answer, similiarAnswers)
 

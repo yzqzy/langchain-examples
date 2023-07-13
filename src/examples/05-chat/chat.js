@@ -1,8 +1,9 @@
 import fs from 'fs'
 
-import { LLMChain } from 'langchain/chains'
 import { PromptTemplate } from 'langchain/prompts'
 import { OpenAI } from 'langchain/llms/openai'
+import { ConversationSummaryMemory } from 'langchain/memory'
+import { ConversationChain, LLMChain } from 'langchain/chains'
 
 import { DirectoryLoader } from 'langchain/document_loaders/fs/directory'
 import { JSONLoader } from 'langchain/document_loaders/fs/json'
@@ -12,6 +13,8 @@ import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter'
 import { HNSWLib } from 'langchain/vectorstores/hnswlib'
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai'
 
+import { QUESTION_PROMPT_TEMPLATE } from './prompt.js'
+
 class LLMChat {
   constructor(options) {
     const { target, dest, prompt } = options
@@ -19,6 +22,12 @@ class LLMChat {
     this.target = target
     this.dest = dest
     this.prompt = prompt
+    this.model = new OpenAI({ temperature: 0, maxTokens: -1 })
+    this.memory = new ConversationSummaryMemory({
+      inputKey: "question",
+      memoryKey: "chat_history",
+      llm: new OpenAI({ modelName: "gpt-3.5-turbo", temperature: 0 }),
+    })
   }
 
   getLocalFiles() {
@@ -84,21 +93,30 @@ class LLMChat {
     return vectorStore
   }
 
-  _generateChain() {
-    const model = new OpenAI({ temperature: 0, maxTokens: -1 })
-    const prompt = PromptTemplate.fromTemplate(
-      this.prompt
-    )
-    return new LLMChain({
-      llm: model,
-      prompt
-    })
+  async _chatWithLLM(question, context) {
+    const prompt = PromptTemplate.fromTemplate(this.prompt)
+    const chain = new LLMChain({ llm: this.model, prompt })
+    const res = await chain.call({ question, context })
+    return res
   }
 
-  async _chatWithLLM(options) {
+  async _chatWithMemoryLLM(question, context) {
+    const prompt = PromptTemplate.fromTemplate(this.prompt)
+    const chain = new ConversationChain({ llm: this.model, prompt, memory: this.memory })
+    const res = await chain.call({ question, context })
+    return res
+  }
+
+  async _chatWithQuestion(question) {
+    const prompt = PromptTemplate.fromTemplate(QUESTION_PROMPT_TEMPLATE)
+    const chain = new ConversationChain({ llm: this.model, prompt, memory: this.memory })
+    const res = await chain.call({ question })
+    return res
+  }
+
+  async _chat(options) {
     const { question, referenceContext } = options
-    const chain = this._generateChain()
-    const res = await chain.call({ question, context: referenceContext })
+    const res = await this._chatWithLLM(question, referenceContext)
     return res
   }
 
@@ -110,8 +128,16 @@ class LLMChat {
   async chat(vectorStore, question) {
     const referenceContextDocuments = await vectorStore.similaritySearch(question, 1);
     const contextString = (referenceContextDocuments || []).map(docItem => `[${this._getFileName(docItem.metadata.source)}] ${docItem.pageContent}`).join('/n')
-    const answer = await this._chatWithLLM({ question, referenceContext: contextString })
+    const answer = await this._chat({ question, referenceContext: contextString })
     return answer
+  }
+
+  async chatWithCache(vectorStore, question) {
+    const qs = await this._chatWithQuestion(question)
+    console.log(qs.response)
+    const res = await this.chat(vectorStore, qs.response)
+    console.log(res.text)
+    return res
   }
 }
 

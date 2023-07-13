@@ -3,6 +3,8 @@ import { ZHICHENG_PROMPT_TEMPLATE, ZHICHENG_CHAT_PROMPT_TEMPLATE } from '../../.
 
 import { join } from 'path'
 
+let llmChat: LLMChat
+
 export default defineEventHandler(async event => {
   const { type, text } = await readBody(event)
 
@@ -24,15 +26,17 @@ export default defineEventHandler(async event => {
   const target = join(base, 'static/zhicheng_data')
   const dest = join(base, 'static/zhicheng_venctor_data')
 
-  const llmChat = new LLMChat({
-    target,
-    dest,
-    prompt
-  })
+  if (!llmChat) {
+    llmChat = new LLMChat({
+      target,
+      dest,
+      prompt
+    })
+  }
 
   const fiels = await llmChat.getLocalDocs('csv')
   const vectorStore = await llmChat.initVectorStore(fiels)
-  const answer = await llmChat.chat(vectorStore, text)
+  const answer = await llmChat.chatWithCache(vectorStore, text)
 
   return answer.text
 })
