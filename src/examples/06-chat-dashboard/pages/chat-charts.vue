@@ -36,6 +36,10 @@
           </div>
         </div>
       </div>
+      <div class="history-msg-wrap" ref="historyMsgRef">
+        <h4> 历史消息：</h4>
+        <p class="msg-item" v-for="item of historyMessage">{{ item.question }}</p>
+      </div>
     </div>
   </div>
 </template>
@@ -53,6 +57,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js'
+import { usChartsGenerator } from '@/composables/usChartsGenerator';
 
 import { Bar, Line, Pie } from 'vue-chartjs'
 
@@ -68,6 +73,8 @@ ChartJS.register(
   Legend
 )
 
+const { generateData, generatePieData } = await usChartsGenerator()
+
 const loading = ref(false)
 const inputText = ref('天津的全年人口数据')
 
@@ -80,58 +87,24 @@ type Charts = {
   data: any
 }
 type Message = {
+  question: string,
   content: string,
   similiarAnswers: string[],
   lineCharts?: Charts,
   barCharts?: Charts,
   pieCharts?: Charts
 }
+
+const historyMsgRef = ref()
+const historyMessage = ref<Message[]>([])
+
 const message = ref<Message>()
 
-const generateData = (label: string, data: { x: string[], y: string[] }) => {
-  return {
-    data: {
-      labels: data.x,
-      datasets: [
-        {
-          label,
-          backgroundColor: '#ecf5ff',
-          data: data.y
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false
-    }
-  }
-}
-const generateRandomColor = (count: number) => {
-  const colors = [];
-  for (let i = 0; i < count; i++) {
-    const color = "#" + Math.floor(Math.random() * 16777215).toString(16);
-    colors.push(color);
-  }
-  return colors;
-}
-
-const generatePieData = (data: { x: string[], y: string[] }) => {
-  return {
-    data: {
-      labels: data.x,
-      datasets: [
-        {
-          backgroundColor: generateRandomColor(data.y.length),
-          data: data.y
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false
-    }
-  }
-}
+watch(historyMessage, () => {
+  nextTick(() => {
+    historyMsgRef.value.scrollTop = historyMsgRef.value.scrollHeight
+  })
+})
 
 const query = async () => {
   if (!inputText.value) return
@@ -139,6 +112,13 @@ const query = async () => {
   loading.value = true
 
   const text = inputText.value
+
+  if (message.value) {
+    historyMessage.value = [
+      ...historyMessage.value,
+      message.value
+    ]
+  }
 
   try {
     const { data } = await useFetch('/api/chat', {
@@ -150,13 +130,16 @@ const query = async () => {
 
     const { text: answer, similiarAnswers, dimension, data: chartsData } = JSON.parse(data.value)
 
-    message.value = {
+    const msg = {
+      question: text,
       content: answer,
       similiarAnswers,
       lineCharts: generateData(dimension, chartsData),
       barCharts: generateData(dimension, chartsData),
       pieCharts: generatePieData(chartsData)
     }
+
+    message.value = msg
 
     loading.value = false
   } catch (error) {
@@ -231,6 +214,7 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     border-radius: 4px;
+    margin-right: 20px;
     overflow: hidden;
 
     .chat-gpt-container {
@@ -266,7 +250,32 @@ onMounted(() => {
         margin-top: 10px;
       }
     }
+  }
 
+  .history-msg-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 300px;
+    height: 500px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 0 10px;
+    box-sizing: border-box;
+
+    h4 {
+      width: 100%;
+    }
+
+    .msg-item {
+      display: inline-block;
+      font-size: 14px;
+      line-height: 24px;
+      margin-top: 10px;
+      color: #333;
+      padding: 10px;
+      background-color: #f5f5f5;
+    }
   }
 }
 </style>

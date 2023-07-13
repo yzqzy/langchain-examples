@@ -23,13 +23,13 @@ export const PROMPT_TEMPLATE = `
 
   请返回JSON格式的回答:
 
-    前括号
+    {{
       "text": "<这里放你的回答>",
       "similiarAnswers": [
         "<联想的问题1>",
         "<联想的问题2>"
       ]
-    后括号
+    }}
 
   最后强调: 回复内容必须是标准的JSON格式,可以使用 nodejs 的 JSON.parse API 进行解析,不能包含其他内容,否则你将被扣分！！！
 `
@@ -52,13 +52,13 @@ export const ZHICHENG_PROMPT_TEMPLATE = `
 
   请返回JSON格式的回答:
 
-    前括号
+    {{
       "text": "<这里放你的回答>",
       "similiarAnswers": [
         "<联想的问题1>",
         "<联想的问题2>"
       ]
-    后括号
+    }}
 
   最后强调: 回复内容必须是标准的JSON格式,可以使用 nodejs 的 JSON.parse API 进行解析,不能包含其他内容,否则你将被扣分！！！
 `
@@ -81,7 +81,7 @@ export const ZHICHENG_CHAT_PROMPT_TEMPLATE = `
 
   请返回JSON格式的回答(一行数据,不需要空格):
 
-    前括号
+    {{
       "text: "<这里放你的回答>",
       "similiarAnswers": [
         "<联想的问题1>",
@@ -89,11 +89,11 @@ export const ZHICHENG_CHAT_PROMPT_TEMPLATE = `
       ],
       "dimension:: "<这里放你的回答>",
       "data": 
-        前括号
+        {{
           "x": ["<数据>"],
           "y": ["<数据>"]
-        后括号
-    后括号
+        }}
+    }}
 
   最后强调: 回复内容必须是标准的JSON格式,可以使用 nodejs 的 JSON.parse API 进行解析,不能包含其他内容，否则你将被扣分！！！
 `
