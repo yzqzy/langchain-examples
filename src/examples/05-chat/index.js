@@ -69,8 +69,8 @@ const App = async () => {
   // await jdCase()
 
   await zhichengCase("天津市的GDP年度数据")
-  // await timemout(3 * 1000)
-  // await zhichengCase("人口数据")
+  await timemout(3 * 1000)
+  await zhichengCase("人口数据")
 }
 
 App()

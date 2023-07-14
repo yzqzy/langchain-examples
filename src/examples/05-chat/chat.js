@@ -133,9 +133,12 @@ class LLMChat {
   }
 
   async chatWithCache(vectorStore, question) {
+    console.log('-----------------------------------------')
+    console.log(question)
     const qs = await this._chatWithQuestion(question)
     console.log(qs.response)
     const res = await this.chat(vectorStore, qs.response)
+    console.log(qs.response)
     console.log(res.text)
     return res
   }
