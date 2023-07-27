@@ -27,7 +27,6 @@
     "csv": "^6.3.1",
     "d3-dsv": "^2.0.0",
     "dotenv": "^16.3.1",
-    "graphql": "^16.7.1",
     "hnswlib-node": "^2.0.0",
     "langchain": "^0.0.105",
     "serpapi": "^1.1.1"
