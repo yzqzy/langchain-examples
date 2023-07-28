@@ -1,0 +1,137 @@
+"""Date (isoformat)"""
+scalar Date
+
+input DateRange {
+  start: Date
+  end: Date
+}
+
+enum OrderType {
+  ASC
+  DESC
+}
+
+type Product {
+  productId: String
+  productName: String
+  category: String
+  groupName: String
+  brandName: String
+  price: Float
+  unit: String
+  spec: String
+  package: String
+  launchDate: Date
+}
+
+input ProductFilter {
+  productId: [String!]
+  productName: [String!]
+  category: [String!]
+  cls1: [String!]
+  cls2: [String!]
+  cls3: [String!]
+  groupName: [String!]
+  brandName: [String!]
+  launchTime: DateRange
+}
+
+input ProductOrderBy {
+  launchTime: OrderType
+  amount: OrderType
+  price: OrderType
+}
+
+type ProductSale {
+  bizDate: Date
+  quarter: String
+
+  """条码"""
+  productId: String
+
+  """省份"""
+  province: String
+
+  """业态"""
+  channel: String
+
+  """类目"""
+  category: String
+  cls1: String
+  cls2: String
+  cls3: String
+
+  """大区"""
+  region: String
+
+  """集团"""
+  groupName: String
+
+  """品牌"""
+  brandName: String
+
+  """商品名"""
+  productName: String
+
+  """属性名"""
+  propertyName: String
+
+  """属性值"""
+  propertyValue: String
+
+  """销售额"""
+  amount: Float
+
+  """销量"""
+  quantity: Int
+
+  """价格"""
+  price: Float
+  amountPerStore: Float
+
+  """销售额环比"""
+  amountMonthOnMonth: Float
+
+  """销售额同比"""
+  amountYearOnYear: Float
+
+  """市占率环比"""
+  marketShareMonthOnMonth: Float
+
+  """市占率同比"""
+  marketShareYearOnYear: Float
+
+  """市占率"""
+  marketShare: Float
+  products(limit: Int! = 10, orderBy: ProductOrderBy = null): [Product!]!
+}
+
+input ProductSaleFilter {
+  productId: [String!]
+  productName: [String!]
+  province: [String!]
+  channel: [String!]
+  category: [String!]
+  cls1: [String!]
+  cls2: [String!]
+  cls3: [String!]
+  region: [String!]
+  groupName: [String!]
+  brandName: [String!]
+  propertyName: [String!]
+  bizDate: DateRange
+  granularity: String
+}
+
+input ProductSaleOrderBy {
+  amount: OrderType
+  quantity: OrderType
+  bizDate: OrderType
+  quarter: OrderType
+  marketShare: OrderType
+}
+
+type Query {
+  productSales(limit: Int = 20, where: ProductSaleFilter = null, orderBy: ProductSaleOrderBy = null): [ProductSale!]!
+  products(limit: Int = 20, where: ProductFilter = null, orderBy: ProductOrderBy = null): [Product!]!
+}
