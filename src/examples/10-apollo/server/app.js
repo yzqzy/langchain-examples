@@ -17,4 +17,4 @@ const App = async () => {
   console.log(`🚀 Server ready at ${url}`)
 }
 
-App().then(() => {})
+App()
