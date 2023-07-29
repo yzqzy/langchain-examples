@@ -3,15 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "serve": "nodemon server/app.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@apollo/server": "^4.8.1",
-    "graphql": "^16.7.1"
+    "graphql": "^16.7.1",
+    "nodemon": "^3.0.1"
   }
 }
