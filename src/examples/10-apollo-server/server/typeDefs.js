@@ -11,10 +11,27 @@ type Author {
   star: Int
 }
 
+interface Animal {
+  name: String
+  footLength: Int
+}
+type Spider implements Animal {
+  name: String
+  footLength: Int
+}
+type Bird implements Animal {
+  name: String
+  footLength: Int
+  wingLength: Int
+  wing: Boolean
+}
+
 type Query {
   books: [Book],
-  book(id: ID!): Book
-  
+  book(id: ID!): Book,
+
   authors: [Author],
+
+  animals: [Animal]
 }
 `

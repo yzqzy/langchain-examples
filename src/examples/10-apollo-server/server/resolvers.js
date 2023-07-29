@@ -22,21 +22,43 @@ const Authors = [
     star: 3000
   }
 ]
+const Animals = [
+  {
+    name: 'cat',
+    footLength: 123
+  },
+  {
+    name: 'dog',
+    footLength: 123,
+    wingLength: 457,
+    wing: false
+  }
+]
 
 export const resolvers = {
   Query: {
     books: () => Books,
-    book: (_, args, context) => {
-      console.log(context)
-
+    book: (_, args) => {
       return Books.find(book => book.id === args.id)
     },
 
-    authors: () => Authors
+    authors: () => Authors,
+
+    animals: () => {
+      return Animals
+    }
   },
   Book: {
     author: parent => {
       return Authors.find(author => author.id === parent.author)
+    }
+  },
+  Animal: {
+    __resolveType(data) {
+      if (data.wingLength) {
+        return 'Bird'
+      }
+      return 'Spider'
     }
   }
 }
