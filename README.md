@@ -1,6 +1,9 @@
 # langchain-examples
 
-langchain.js 相关调研及其案例实现
+* langchain.js
+* vega-lite
+* graphql
+* cube.js
 
 ## langchain
 
@@ -63,9 +66,3 @@ pnpm run build
 ```bash
 pnpm run preview
 ```
-
-## vega-lite
-
-## graphql
-
-## cube.js
